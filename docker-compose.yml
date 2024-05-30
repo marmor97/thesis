@@ -1,0 +1,37 @@
+# BioOps DOES NOT USE THIS docker-compose file - it's only for local debugging :)
+
+services:
+  train:
+    image: train
+    build: .
+    
+    # NOTE: Below is only used for running locally for testing purposes
+    environment:
+      DATA_PATH: /data/
+      OUTPUTS_PATH: /outputs/
+      CONFIG_PATH: /config.yml
+      LOGGING_PATH: /logging_stuff
+      LOCAL: 1
+    volumes:
+      - $PWD/data/:/data
+      - $PWD/local_run/outputs/:/outputs
+      - $PWD/config/first_experiment.yml:/config.yml
+      - $PWD/local_run/logs:/logging_stuff
+  
+  inference:
+    image: inference
+    build:
+      context: .
+      dockerfile: Dockerfile.inference
+    
+    # NOTE: Below is only used for running locally for testing purposes
+    ports:
+      - "8080:8080"
+    volumes:
+        - $PWD/local_run/outputs/:/opt/ml/model
+
+  train-gpu:
+    image: train-gpu
+    build:
+      context: .
+      dockerfile: Dockerfile.train.gpu
