@@ -1,0 +1,140 @@
+###
+# Combined config file
+###
+
+# Git repository and local flag
+git: https://novonordiskit@dev.azure.com/novonordiskit/Biotool%20Spectroscopy/_git/thesis-xmrt
+
+script: combined
+# Network isolation
+training_network_isolation: false
+
+# General settings
+wandb_project: thesis-xmrt
+max_runtime_in_seconds: 1000000
+instance_type: ml.m5.24xlarge  
+# Data path
+s3_path: s3://xmrthesis/
+
+data: # Retrieval settings
+  data_id: QuALITY #QuALITY   # NQ
+  subpath: QuALITY #QuALITY   # NQ
+  
+  # NQ_test.json  
+  filename: QuALITY.v1.0.1.htmlstripped.dev3000.easy   
+  n_questions: 100 
+
+  # Missing: 4,3,2,1
+  n_retrieval_docs: 1 #10 # 10*10000 = 100,000 tokens 
+  include_gold: false
+
+# Experiment settings
+experiment:
+  batch_size: 1
+  grid_search: false
+  type: rag  # Options: baseline, rag, em
+  seed: 2024
+  top_k: 1
+  multiple_runs: true
+  separators: ["\n"," ",",","."]
+  chunk_size: 100
+  chunk_overlap: 0
+  reverse_docs: false
+  stop_list: [".", "\n", "<|endoftext|>"]
+  n_runs: 3
+
+rag:
+  token_padding: None
+  # Model and tokenizer
+  max_length: 15
+  model_id: mosaicml/mpt-7b-chat
+  tokenizer_id: EleutherAI/gpt-neox-20b
+  embedder_id: facebook/contriever
+  embedder_tokenizer_id: facebook/contriever  
+  attn_impl: torch
+  use_cache: True
+  context_window: 2048 #2048 #4096
+  alibi: True
+  generation: beam 
+  beam:
+    num_beams: 5
+    early_stopping: True
+    no_repeat_ngram_size: 2
+  contrastive:
+    do_sample: True
+    num_beams: 1
+    top_k: 4
+    penalty_alpha: 0.6
+  sampling_top_k:
+    do_sample: True,
+    top_k: 50
+  sampling_top_p:
+    do_sample: True,
+    top_p: 0.15
+    top_k: 0
+    temperature: 0.2
+    repetition_penalty: 1.1
+
+em:
+  max_length: 20
+  token_padding: 136
+  # Model and tokenizer
+  model_id: normalcomputing/extended-mind-mpt-7b-chat
+  tokenizer_id: EleutherAI/gpt-neox-20b
+  attn_impl: torch
+  use_cache: True
+  memory_type: faiss
+  context_window: 2048
+  #learned_pos_embedding: True
+  alibi: True
+  stride: 1024
+  generation: beam
+  beam:
+    num_beams: 5
+    early_stopping: True
+    no_repeat_ngram_size: 2
+  contrastive:
+    do_sample: True
+    num_beams: 1
+    top_k: 4
+    penalty_alpha: 0.6
+  sampling_top_k:
+    do_sample: True,
+    top_k: 50
+  sampling_top_p:
+    do_sample: True,
+    top_p: 0.15
+    top_k: 0
+    temperature: 0.2
+    repetition_penalty: 1.1
+
+
+baseline:
+  max_length: 15
+  # Model and tokenizer
+  model_id: mosaicml/mpt-7b-chat #normalcomputing/extended-mind-mpt-7b 
+  tokenizer_id: EleutherAI/gpt-neox-20b
+  attn_impl: torch
+  use_cache: True
+  context_window: 2048
+  learned_pos_embedding: False
+  alibi: False
+  generation: sampling_top_p
+  beam:
+    num_beams: 5
+    early_stopping: True
+    no_repeat_ngram_size: 2
+  contrastive:
+    do_sample: True
+    num_beams: 1
+    top_k: 4
+    penalty_alpha: 0.6
+  sampling_top_k:
+    do_sample: True,
+    top_k: 50
+  sampling_top_p:
+    do_sample: True,
+    top_p: 0.15
+    top_k: 0
+    temperature: 0.1
+    repetition_penalty: 1.1

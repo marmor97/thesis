@@ -1,0 +1,46 @@
+{
+    "os": "macOS-14.5-arm64-arm-64bit",
+    "python": "3.9.6",
+    "heartbeatAt": "2024-05-25T15:09:19.834079",
+    "startedAt": "2024-05-25T15:09:19.792752",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "config/run.yml",
+        "data"
+    ],
+    "state": "running",
+    "program": "/Users/xmrt/Desktop/Master thesis/github/hmm/run.py",
+    "codePathLocal": "run.py",
+    "codePath": "run.py",
+    "host": "MACF6MP72XTH2",
+    "username": "xmrt",
+    "executable": "/Users/xmrt/Desktop/Master thesis/github/.master_thesis/bin/python3",
+    "cpu_count": 8,
+    "cpu_count_logical": 8,
+    "cpu_freq": {
+        "current": 3504,
+        "min": 600,
+        "max": 3504
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3504,
+            "min": 600,
+            "max": 3504
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 460.4317207336426,
+            "used": 9.558265686035156
+        }
+    },
+    "gpuapple": {
+        "type": "arm",
+        "vendor": "Apple"
+    },
+    "memory": {
+        "total": 16.0
+    }
+}
